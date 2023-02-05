@@ -1,0 +1,94 @@
+def is_number(number):
+    try:
+        temp = int(number)
+        return True
+    except:
+        return False
+
+
+def calculate_result(formatted_problems):
+    no_of_problems = len(formatted_problems)
+
+    for i in range(no_of_problems): 
+
+        if formatted_problems[i][1] == '+': 
+            temp = int(formatted_problems[i][0]) + int(formatted_problems[i][2])
+        else: 
+            temp = int(formatted_problems[i][0]) - int(formatted_problems[i][2])
+        
+        temp_list = list(formatted_problems[i])
+        temp_list.append(str(temp))
+        formatted_problems[i] = tuple(temp_list)
+    
+    return formatted_problems
+
+
+def arithmetic_arranger(problems, show_result=False):
+
+    formatted_problems = []
+    final_result = []
+    no_of_problems = len(problems)
+
+
+    if no_of_problems > 5:
+        return "Error: Too many problems."
+
+    for problem in problems:
+        temp = tuple(problem.split())
+
+        if temp[1] != '+' and temp[1] != '-':
+            return "Error: Operator must be '+' or '-'."
+
+        if is_number(temp[0]) != True or is_number(temp[2]) != True:
+            return "Error: Numbers must only contain digits."
+
+        if len(temp[0]) > 4 or len(temp[2]) > 4:
+            return "Error: Numbers cannot be more than four digits."
+
+        formatted_problems.append(temp)    
+
+    i = 0
+    for problem in formatted_problems: 
+        i += 1
+        dashes = max(len(problem[0]), len(problem[2]))+2
+        final_result += ' '*(dashes-len(problem[0]))
+        final_result += problem[0] 
+        if i < no_of_problems: 
+            final_result += ' '*4
+    final_result += '\n'
+         
+    i = 0
+    for problem in formatted_problems: 
+        i += 1
+        final_result += problem[1]
+        final_result += ' '
+        spaces = max(len(problem[0]), len(problem[2]))
+        final_result += ' '*(spaces-len(problem[2]))
+        final_result += problem[2]
+        if i < no_of_problems: 
+            final_result += ' '*4
+    final_result += '\n'
+
+    i = 0
+    for problem in formatted_problems: 
+        i += 1
+        dashes = max(len(problem[0]), len(problem[2])) + 2
+        final_result += '-'*dashes
+        if i < no_of_problems: 
+            final_result += ' '*4
+
+
+    if show_result == True:
+        final_result += '\n'
+        formatted_problems = calculate_result(formatted_problems)
+        i = 0
+        for problem in formatted_problems:
+            i += 1 
+            dashes = max(len(problem[0]), len(problem[2])) + 2
+            final_result += ' '*(dashes - len(problem[3]))
+            final_result += problem[3]
+            if i < no_of_problems: 
+                final_result += ' '*4
+    
+
+    return ''.join(final_result)
